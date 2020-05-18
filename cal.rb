@@ -11,7 +11,10 @@ class Calender
       validate_argv
       set_date
     end
+  end
 
+  # カレンダーを出力
+  def output
     if @month
       set_monthry_calender
     else
@@ -189,4 +192,4 @@ class Calender
   end
 end
 
-cal = Calender.new
+Calender.new.output
