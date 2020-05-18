@@ -141,15 +141,13 @@ class Calender
     first_date = Date.new(@year, @month, 1)
     last_date = Date.new(@year, @month, -1)
 
-    " " * 7 + "#{@month}月 #{@year}" + " " * 5 + make_calender(first_date, last_date)
+    " #{@month}月 #{@year} " + make_calender(first_date, last_date)
   end
 
   def set_yearly_calender
-    heading_yearly = " " * 9 + "#{@year}" + " " * 5 + "\n"
-    calender_ary = [heading_yearly]
+    calender_ary = []
 
     (1..12).each do |n|
-      heading_month =  " " * 10 + "#{n}月" + " " * 5
       if n != 12
         fotter = "\n\n"
       else
@@ -157,10 +155,10 @@ class Calender
       end
       first_date = Date.new(@year, n, 1)
       last_date = Date.new(@year, n, -1)
-      calender_ary.push(heading_month + make_calender(first_date, last_date) + fotter)
+      calender_ary.push(" #{n}月 " + make_calender(first_date, last_date) + fotter)
     end
 
-    calender_ary.join("")
+    " #{@year} \n" + calender_ary.join("")
   end
 
   HEADER_DAY_OF_THE_WEEK = "\n 日 月 火 水 木 金 土\n "
