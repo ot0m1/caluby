@@ -16,11 +16,13 @@ class Calender
   # カレンダーを出力
   def output
     if @month
-      set_monthry_calender
+      calender = set_monthry_calender
     else
       # @month が nil の場合は年間カレンダーを出力する
-      set_yearly_calender
+      calender = set_yearly_calender
     end
+
+    puts calender
   end
 
   # 正しく引数が渡されているかチェック
@@ -135,18 +137,15 @@ class Calender
     end
   end
 
-
   def set_monthry_calender
     first_date = Date.new(@year, @month, 1)
     last_date = Date.new(@year, @month, -1)
 
-    puts header =  " " * 7 + "#{@month}月 #{@year}" + " " * 5 + make_calender(first_date, last_date)
+    " " * 7 + "#{@month}月 #{@year}" + " " * 5 + make_calender(first_date, last_date)
   end
 
   def set_yearly_calender
-    header_year = " " * 9 + "#{@year}" + " " * 5 + "\n"
-
-    puts header_year
+    calender_ary = []
 
     (1..12).each do |n|
       header_month =  " " * 10 + "#{n}月" + " " * 5
@@ -156,15 +155,15 @@ class Calender
         fotter = "\n"
       end
       first_date = Date.new(@year, n, 1)
-      last_date = Date.new(@year, n, -1)      
-      puts header_month + make_calender(first_date, last_date) + fotter
+      last_date = Date.new(@year, n, -1)
+      calender_ary.push(header_month + make_calender(first_date, last_date) + fotter)
     end
 
+    " " * 9 + "#{@year}" + " " * 5 + "\n" + calender_ary.join("")
   end
 
   def make_calender(first_date, last_date)
     calender_ary = []
-    header = "\n 日 月 火 水 木 金 土\n "
     d = 1
     
     (0..41).each do |i|
@@ -180,7 +179,7 @@ class Calender
       end
     end
     
-    header + calender_ary.join(" ")
+    "\n 日 月 火 水 木 金 土\n " + calender_ary.join(" ")
   end
 
   def convert_digits(n)
