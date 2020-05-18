@@ -145,10 +145,11 @@ class Calender
   end
 
   def set_yearly_calender
-    calender_ary = []
+    heading_yearly = " " * 9 + "#{@year}" + " " * 5 + "\n"
+    calender_ary = [heading_yearly]
 
     (1..12).each do |n|
-      header_month =  " " * 10 + "#{n}月" + " " * 5
+      heading_month =  " " * 10 + "#{n}月" + " " * 5
       if n != 12
         fotter = "\n\n"
       else
@@ -156,12 +157,13 @@ class Calender
       end
       first_date = Date.new(@year, n, 1)
       last_date = Date.new(@year, n, -1)
-      calender_ary.push(header_month + make_calender(first_date, last_date) + fotter)
+      calender_ary.push(heading_month + make_calender(first_date, last_date) + fotter)
     end
 
-    " " * 9 + "#{@year}" + " " * 5 + "\n" + calender_ary.join("")
+    calender_ary.join("")
   end
 
+  HEADER_DAY_OF_THE_WEEK = "\n 日 月 火 水 木 金 土\n "
   def make_calender(first_date, last_date)
     calender_ary = []
     d = 1
@@ -179,7 +181,7 @@ class Calender
       end
     end
     
-    "\n 日 月 火 水 木 金 土\n " + calender_ary.join(" ")
+    HEADER_DAY_OF_THE_WEEK + calender_ary.join(" ")
   end
 
   def convert_digits(n)
