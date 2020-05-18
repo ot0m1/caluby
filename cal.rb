@@ -161,7 +161,6 @@ class Calender
     " #{@year} \n" + calender_ary.join("")
   end
 
-  HEADER_DAY_OF_THE_WEEK = "\n 日 月 火 水 木 金 土\n "
   def make_calender(first_date, last_date)
     calender_ary = []
     d = 1
@@ -179,7 +178,7 @@ class Calender
       end
     end
     
-    HEADER_DAY_OF_THE_WEEK + calender_ary.join(" ")
+    "\n 日 月 火 水 木 金 土\n " + calender_ary.join(" ")
   end
 
   def convert_digits(n)
