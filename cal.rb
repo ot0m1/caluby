@@ -170,23 +170,15 @@ class Calender
         calender_ary[i] = "  "
       else
         if Date.new(@year, first_date.month, d).saturday?
-          calender_ary[i] = convert_digits(d).to_s + "\n"
+          calender_ary[i] = sprintf("%02d", d) + "\n"
         else
-          calender_ary[i] = convert_digits(d)
+          calender_ary[i] = sprintf("%02d", d)
         end
         d += 1
       end
     end
     
     "\n 日 月 火 水 木 金 土\n " + calender_ary.join(" ")
-  end
-
-  def convert_digits(n)
-    if n.to_s.length == 1
-      n = " " + n.to_s
-    end
-
-    n
   end
 end
 
