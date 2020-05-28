@@ -2,7 +2,9 @@ require 'date'
 
 class Calender
   def initialize
-    @usage = "Usage: cal [general options] [[-y year] [-m month]]\n" + " " * 7 + "cal [general options] [-y] [[month] year]\n" + " " * 7 + "cal [general options] [-m month] [year]"
+    @usage = "Usage: cal [general options] [[-y year] [-m month]]" + "\n" + \
+    sprintf("%48s", "cal [general options] [-y] [[month] year]") + "\n" + \
+    sprintf("%46s", "cal [general options] [-m month] [year]")
 
     if ARGV.empty?
       @year = Date.today.year
