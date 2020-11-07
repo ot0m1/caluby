@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 require 'date'
 
 class Calender
   def initialize
-    @usage = "Usage: cal [general options] [[-y year] [-m month]]" + "\n" + \
-    sprintf("%48s", "cal [general options] [-y] [[month] year]") + "\n" + \
-    sprintf("%46s", "cal [general options] [-m month] [year]")
+    @usage = "Usage: cal [general options] [[-y year] [-m month]]\n#{format('%48s', 'cal [general options] [-y] [[month] year]')}\n#{format('%46s', 'cal [general options] [-m month] [year]')}"
 
     if ARGV.empty?
       @year = Date.today.year
@@ -17,28 +17,29 @@ class Calender
 
   # カレンダーを出力
   def output
-    if @month
-      calender = set_monthry_calender
-    else
-      # @month が nil の場合は年間カレンダーを出力する
-      calender = set_yearly_calender
-    end
+    calender = if @month
+                 set_monthry_calender
+               else
+                 # @month が nil の場合は年間カレンダーを出力する
+                 set_yearly_calender
+               end
 
     puts calender
   end
 
   # 正しく引数が渡されているかチェック
   private
+
   def validate_argv
     # 実装しているオプションは -m と -y のみ
-    illegal_option_matchs = ARGV.grep(/-[\S]{2,}|-[^my]/)
+    illegal_option_matchs = ARGV.grep(/-\S{2,}|-[^my]/)
     unless illegal_option_matchs.empty?
-      puts "cal: illegal option -- #{illegal_option_matchs[0].gsub(/(^.*?)(-)/, "")}\n#{@usage}"
+      puts "cal: illegal option -- #{illegal_option_matchs[0].gsub(/(^.*?)(-)/, '')}\n#{@usage}"
       exit(1)
     end
 
     # 同じオプションは複数指定できない
-    duplicated = ARGV.select{ |e| ARGV.count(e) > 1 }.select.grep(/-[my]/)
+    duplicated = ARGV.select { |e| ARGV.count(e) > 1 }.select.grep(/-[my]/)
     unless duplicated.empty?
       puts "cal: Double #{duplicated[0]} specified.\n#{@usage}"
       exit(1)
@@ -52,7 +53,7 @@ class Calender
 
     # 引数が4つの場合は -y -m のオプションが必須
     if ARGV.length == 4
-      unless ARGV.include?("-m") || ARGV.include?("-y")
+      unless ARGV.include?('-m') || ARGV.include?('-y')
         puts @usage
         exit(1)
       end
@@ -65,16 +66,16 @@ class Calender
       exit(1)
     end
   end
-  
+
   # コマンドライン引数をもとにカレンダー対象日を決定する
   def set_date
     if ARGV.length == 1
       case ARGV[0]
-      when "-y"
+      when '-y'
         # -y オプションだけ渡された場合はその年のすべての月を表示する
         @year = Date.today.year
         @month = nil
-      when "-m"
+      when '-m'
         # -m オプションだけ渡された場合は処理できずエラー
         puts "cal: option requires an argument -- m\n#{@usage}"
         exit(1)
@@ -87,53 +88,53 @@ class Calender
 
     if ARGV.length == 2
       case ARGV[0]
-        when "-y"
-          @year = ARGV[1].to_i
-          @month = nil
-        when "-m"
-          @year = Date.today.year
-          @month = ARGV[1].to_i
-        else
-          @year = ARGV[1].to_i
-          @month = ARGV[0].to_i
-        end
+      when '-y'
+        @year = ARGV[1].to_i
+        @month = nil
+      when '-m'
+        @year = Date.today.year
+        @month = ARGV[1].to_i
+      else
+        @year = ARGV[1].to_i
+        @month = ARGV[0].to_i
+      end
     end
 
     if ARGV.length == 3
       case ARGV[0]
-        when "-y"
-          # -y オプションは数字を2つとれない
-          puts "cal: -y together a given month is not supported.\n#{@usage}"
-          exit(1)
-        when "-m"
-          @year = ARGV[2].to_i
-          @month = ARGV[1].to_i
-        else
-          # 数字だけで3つの引数はエラー
-          puts @usage
-          exit(1)
-        end
+      when '-y'
+        # -y オプションは数字を2つとれない
+        puts "cal: -y together a given month is not supported.\n#{@usage}"
+        exit(1)
+      when '-m'
+        @year = ARGV[2].to_i
+        @month = ARGV[1].to_i
+      else
+        # 数字だけで3つの引数はエラー
+        puts @usage
+        exit(1)
+      end
     end
 
     if ARGV.length == 4
       ARGV.each_with_index do |arg, i|
         case arg
-        when "-y"
+        when '-y'
           @year = ARGV[i + 1].to_i
-        when "-m"
+        when '-m'
           @month = ARGV[i + 1].to_i
         end
       end
     end
 
     # year は 1..9999
-    unless (1..9999).include?(@year.to_i)
+    unless (1..9999).cover?(@year.to_i)
       puts "cal: year '#{@year}' not in range 1..9999\n#{@usage}"
       exit(1)
     end
 
     # month は 1..12
-    if @month && !(1..12).include?(@month)
+    if @month && !(1..12).cover?(@month)
       puts "cal: #{@month} is neither a month number (1..12)\n#{@usage}"
       exit(1)
     end
@@ -150,37 +151,37 @@ class Calender
     calender_ary = []
 
     (1..12).each do |n|
-      if n != 12
-        fotter = "\n\n"
-      else
-        fotter = "\n"
-      end
+      fotter = if n != 12
+                 "\n\n"
+               else
+                 "\n"
+               end
       first_date = Date.new(@year, n, 1)
       last_date = Date.new(@year, n, -1)
       calender_ary.push(" #{n}月 " + make_calender(first_date, last_date) + fotter)
     end
 
-    " #{@year} \n" + calender_ary.join("")
+    " #{@year} \n" + calender_ary.join('')
   end
 
   def make_calender(first_date, last_date)
     calender_ary = []
     d = 1
-    
+
     (0..41).each do |i|
-      if i < first_date.wday || i > ( last_date.day + first_date.wday - 1 )
-        calender_ary[i] = "  "
+      if i < first_date.wday || i > (last_date.day + first_date.wday - 1)
+        calender_ary[i] = '  '
       else
-        if Date.new(@year, first_date.month, d).saturday?
-          calender_ary[i] = sprintf("%02d", d) + "\n"
-        else
-          calender_ary[i] = sprintf("%02d", d)
-        end
+        calender_ary[i] = if Date.new(@year, first_date.month, d).saturday?
+                            "#{format('%02d', d)}\n"
+                          else
+                            format('%02d', d)
+                          end
         d += 1
       end
     end
-    
-    "\n 日 月 火 水 木 金 土\n " + calender_ary.join(" ")
+
+    "\n 日 月 火 水 木 金 土\n #{calender_ary.join(' ')}"
   end
 end
 
